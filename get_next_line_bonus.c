@@ -1,8 +1,11 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
+
+
+
 
 char *get_next_line(int fd)
 {
-    static char *line;
+    static char *line[1000];
     char *buff;
     int num_char;
 
@@ -19,11 +22,13 @@ char *get_next_line(int fd)
         return (NULL);
     }
     if (num_char == 0)
-        return get_last_line(&line, buff);
+        return get_last_line(&line[fd], buff);
        
 
-    return get_fragment_of_line(&line, buff, fd);
+    return get_fragment_of_line(&line[fd], buff, fd);
+ 
 }
+
 
 char *get_fragment_of_line(char **str_line, char *str_buff, int fd)
 {

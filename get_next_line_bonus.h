@@ -1,5 +1,5 @@
-#ifndef GET_NEXT_LINE_H
-#define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+#define GET_NEXT_LINE_BONUS_H
 
 
 
@@ -23,8 +23,3 @@ char *get_last_line(char **str_line, char *str_buff);
 #endif
 
 #endif
-
-
-
-
-
