@@ -17,6 +17,8 @@ char *strdup_after(char *str, char c);
 char *get_next_line(int fd);
 char *get_fragment_of_line(char **str_line, char *str_buff, int fd);
 char *get_last_line(char **str_line, char *str_buff);
+void	ft_str_free(char **str);
+
 
 #ifndef BUFFSIZE
 #define BUFFSIZE 1

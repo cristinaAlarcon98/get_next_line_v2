@@ -29,28 +29,36 @@ char	*get_next_line(int fd)
 		free(buff);
 		return (NULL);
 	}
+	buff[num_char] = '\0';
 	if (num_char == 0)
 		return (get_last_line(&line, buff));
 	return (get_fragment_of_line(&line, buff, fd));
 }
 
+void	ft_str_free(char **str)
+{
+	if (*str)
+	{
+		free (*str);
+		*str = NULL;
+	}
+}
+
 char	*get_fragment_of_line(char **str_line, char *str_buff, int fd)
 {
-	char	*new_line;
 	char	*str_line_before_n;
-	char	*str_line_after_n;
+	char	*str_tmp;
 
-	if (*str_line == NULL)
-		*str_line = "";
-	new_line = ft_strjoin(*str_line, str_buff);
+	str_tmp = *str_line;
+	*str_line = ft_strjoin(str_tmp, str_buff);
 	free(str_buff);
-	*str_line = new_line;
+	free(str_tmp);
 	if (has_new_line(*str_line))
 	{
+		str_tmp = *str_line;
 		str_line_before_n = strdup_before(*str_line, '\n');
-		str_line_after_n = strdup_after(*str_line, '\n');
-		free(*str_line);
-		*str_line = str_line_after_n;
+		*str_line = strdup_after(str_tmp, '\n');
+		free(str_tmp);
 		return (str_line_before_n);
 	}
 	return (get_next_line(fd));
@@ -58,30 +66,48 @@ char	*get_fragment_of_line(char **str_line, char *str_buff, int fd)
 
 char	*get_last_line(char **str_line, char *str_buff)
 {
-	char	*new_line;
-	char	*str_line_before_n;
-	char	*str_line_after_n;
-	char	*str_line_before_z;
-
+	char	*str_tmp;
+	char	*str_line_before;
+	
+	free(str_buff);
 	if (ft_strlen(*str_line))
 	{
-		new_line = ft_strjoin(*str_line, str_buff);
-		free(str_buff);
-		*str_line = new_line;
 		if (has_new_line(*str_line))
 		{
-			str_line_before_n = strdup_before(*str_line, '\n');
-			str_line_after_n = strdup_after(*str_line, '\n');
-			free(*str_line);
-			*str_line = str_line_after_n;
-			return (str_line_before_n);
+			str_tmp = *str_line;
+			str_line_before = strdup_before(*str_line, '\n');
+			*str_line = strdup_after(str_tmp, '\n');
+			free(str_tmp);
+			return (str_line_before);
 		}
-		str_line_before_z = strdup_before(*str_line, '\0');
+		str_line_before = strdup_before(*str_line, '\0');
 		free(*str_line);
 		*str_line = NULL;
-		return (str_line_before_z);
+		return (str_line_before);
 	}
-	free (*str_line);
+	free(*str_line);
 	*str_line = NULL;
 	return (*str_line);
 }
+
+/* int main()
+{
+     int fd;
+     char *line;
+
+     fd = open("text.txt", O_RDONLY);
+     if (fd < 0)
+     {
+         perror("Error opening file");
+         return (1);
+    }
+
+     while ((line = get_next_line(fd)))
+     {
+         printf("%s\n", line);
+         free(line);
+     }
+
+     close(fd);
+     return (0);
+ } */
